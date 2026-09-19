@@ -49,10 +49,16 @@ class Engine:
         started = datetime.now(timezone.utc)
         run_id = started.strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
         results, errors, warnings = [], [], []
-        enabled = [c for c in self.config.get("companies", []) if c.get("enabled", True)]
+        active_target_profile = self.config.get("active_target_profile")
+        enabled = [
+            c for c in self.config.get("companies", [])
+            if c.get("enabled", True)
+            and (not active_target_profile or c.get("target_profile") == active_target_profile)
+        ]
         attempted = 0
         new_count = 0
-        self._log(f"Starting biotech job search — {len(enabled)} enabled companies")
+        profile_suffix = f" for target profile {active_target_profile!r}" if active_target_profile else ""
+        self._log(f"Starting biotech job search — {len(enabled)} enabled companies{profile_suffix}")
         self._log(f"Request timeout: {self.request_timeout}s | company hard timeout: {self.company_timeout}s")
 
         for idx, company in enumerate(enabled, start=1):

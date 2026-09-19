@@ -5,11 +5,29 @@ from bs4 import BeautifulSoup
 from .base import BaseAdapter
 from biotech_jobs.models import Job
 
-TITLE_HINT = re.compile(r"bioinform|computational|scientist|data science|data scientist|genomic|microbiom|metagenom|informatics|algorithm|research|director|manager|engineer|application|developer|analyst", re.I)
+TITLE_HINT = re.compile(
+    r"bioinform|computational|scientist|data science|data scientist|genomic|microbiom|"
+    r"metagenom|informatics|algorithm|research|director|manager|engineer|application|"
+    r"developer|analyst|microbiolog|ferment|bioprocess|food techn|food sci|probiotic|"
+    r"protein|laboratory|lab technician|strain|cultivation|brew",
+    re.I,
+)
 JOB_HREF = re.compile(r"(/job/|/jobs/|/position/|/positions/|/opening/|/openings/|jobid=|gh_jid=|jobId=|requisition|careersection)", re.I)
 DEFAULT_ENTRY_TEXT = r"(search jobs|view all jobs|current opportunities|current openings|explore job opportunities|explore open positions|view openings|job openings|open roles|see current opportunities|view our open roles|find job openings|view and apply to open positions|career center)"
 ENTRY_TEXT = re.compile(DEFAULT_ENTRY_TEXT, re.I)
-ATS_HOSTS = ("greenhouse.io","lever.co","ashbyhq.com","gem.com","myworkdayjobs.com","oraclecloud.com","smartrecruiters.com","successfactors.com","phenompeople.com","icims.com","jibecdn.com","workforcenow.adp.com","jobvite.com","breezy.hr")
+GENERIC_LINK_LABELS = {
+    "applications", "applicant tracking system by teamtailor", "apply here", "apply here →",
+    "careers", "embedded job board", "employee login", "explore all open positions",
+    "job opening", "job openings", "log in as employee", "open positions", "open roles",
+    "read more and apply", "social menu", "skip to main content",
+    "submit your open application (opens in a new window)",
+}
+ATS_HOSTS = (
+    "greenhouse.io", "lever.co", "ashbyhq.com", "gem.com", "myworkdayjobs.com",
+    "oraclecloud.com", "smartrecruiters.com", "successfactors.com", "phenompeople.com",
+    "icims.com", "jibecdn.com", "workforcenow.adp.com", "jobvite.com", "breezy.hr",
+    "recright.com", "personio.de", "teamtailor.com", "bamboohr.com",
+)
 
 
 def _likely_job_link(href: str, text: str, root_host: str) -> bool:
@@ -71,6 +89,12 @@ class BrowserCareerPageAdapter(BaseAdapter):
                         full=urljoin(frame.url or base_url,href)
                         if not href:
                             continue
+                        normalized_label=" ".join(label.lower().split())
+                        if normalized_label in GENERIC_LINK_LABELS:
+                            continue
+                        parsed_path=urlparse(full).path.rstrip("/")
+                        if not normalized_label and not JOB_HREF.search(full) and parsed_path in {"", "/careers"}:
+                            continue
                         low=(label+" "+full).lower()
                         custom_terms=company.get("entry_text_terms") or []
                         entry_match=ENTRY_TEXT.search(label or "") or any(str(t).lower() in (label or "").lower() for t in custom_terms)
@@ -80,9 +104,50 @@ class BrowserCareerPageAdapter(BaseAdapter):
                             continue
                         if any(x in low for x in ["privacy","terms","talent community","join our talent","career home"]):
                             continue
-                        seen.add(full); discovered.append((label[:180] or "Job opening",full))
+                        seen.add(full); discovered.append((label[:180] or "Job opening",full,"",""))
             if browser_error is None:
                 collect_from_frames(page.frames,url)
+                if company.get("heading_jobs"):
+                    heading_terms = re.compile(
+                        r"scientist|research|microbiolog|ferment|bioprocess|protein|laboratory|"
+                        r"technician|operator|engineer|food|strain|cultivation|brew",
+                        re.I,
+                    )
+                    for h in page.locator("h2, h3, h4, h5, h6").all():
+                        try:
+                            label=(h.inner_text() or "").strip()
+                        except Exception:
+                            continue
+                        if not label or len(label) > 180 or not heading_terms.search(label):
+                            continue
+                        if " ".join(label.lower().split()) in GENERIC_LINK_LABELS:
+                            continue
+                        synthetic=url+"#"+re.sub(r"[^a-z0-9]+","-",label.lower()).strip("-")
+                        if synthetic in seen:
+                            continue
+                        seen.add(synthetic); discovered.append((label[:180],synthetic,"",""))
+                rendered_selector=company.get("rendered_job_selector")
+                if rendered_selector:
+                    title_selector=company.get("rendered_job_title_selector")
+                    link_selector=company.get("rendered_job_link_selector", "a[href]")
+                    description_selector=company.get("rendered_job_description_selector")
+                    location_attribute=company.get("rendered_job_location_attribute")
+                    for card in page.locator(rendered_selector).all():
+                        try:
+                            title_node=card.locator(title_selector).first if title_selector else card
+                            label=" ".join((title_node.inner_text() or "").split())
+                            link_node=card.locator(link_selector).first
+                            href=link_node.get_attribute("href") or ""
+                            full=urljoin(page.url,href)
+                            desc=""
+                            if description_selector and card.locator(description_selector).count():
+                                desc=" ".join((card.locator(description_selector).first.inner_text() or "").split())[:16000]
+                            loc=(card.get_attribute(location_attribute) or "").strip() if location_attribute else ""
+                        except Exception:
+                            continue
+                        if not label or not href or full in seen:
+                            continue
+                        seen.add(full); discovered.append((label[:180],full,loc[:120],desc))
                 if company.get("browser_pagination"):
                     maxp=int(company.get("max_browser_pages",4))
                     for _page_no in range(2,maxp+1):
@@ -120,8 +185,10 @@ class BrowserCareerPageAdapter(BaseAdapter):
                     full=urljoin(url,href)
                     if full in seen or not href:
                         continue
+                    if " ".join(label.lower().split()) in GENERIC_LINK_LABELS:
+                        continue
                     if _likely_job_link(full,label,root_host) or any(x in urlparse(full).netloc for x in ATS_HOSTS):
-                        seen.add(full); discovered.append((label[:180] or "Job opening",full))
+                        seen.add(full); discovered.append((label[:180] or "Job opening",full,"",""))
             except Exception:
                 if browser_error is not None:
                     raise browser_error
@@ -144,10 +211,10 @@ class BrowserCareerPageAdapter(BaseAdapter):
             except Exception:
                 pass
         used=0
-        for label,href in discovered:
-            title=label; location=""; desc=""; raw={"listing_url":url}
+        for label,href,location,desc in discovered:
+            title=label; raw={"listing_url":url}
             # Enrich likely relevant jobs. Non-relevant postings are still retained for board-health tracking.
-            if TITLE_HINT.search(title or "") and used < max_detail:
+            if not desc and (company.get("enrich_all") or TITLE_HINT.search(title or "")) and used < max_detail:
                 used += 1
                 try:
                     rr=self.session.get(href,timeout=self.timeout,allow_redirects=True); rr.raise_for_status()
@@ -162,5 +229,7 @@ class BrowserCareerPageAdapter(BaseAdapter):
                 except Exception:
                     pass
             sid=hashlib.sha1(href.encode()).hexdigest()[:20]
+            if " ".join(title.lower().split()) in GENERIC_LINK_LABELS:
+                continue
             yield Job(company=company["name"],title=title,location=location,url=href,source="browser_career",source_id=sid,description=desc,raw=raw)
         self.last_stats["details_enriched"]=used

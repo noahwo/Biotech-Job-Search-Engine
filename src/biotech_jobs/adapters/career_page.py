@@ -5,8 +5,19 @@ from .base import BaseAdapter
 from biotech_jobs.models import Job
 import json, re, hashlib
 
-TITLE_HINT = re.compile(r"bioinform|computational|scientist|data science|data scientist|genomic|microbiom|metagenom|informatics|algorithm|research|director|manager|engineer|developer|software|application|analyst", re.I)
-EXTERNAL_JOB_HOST_HINTS = ("greenhouse.io","lever.co","ashbyhq.com","recruitee.com","gem.com","oraclecloud.com","smartrecruiters.com","myworkdayjobs.com","jobvite.com","icims.com","workable.com","isolvedhire.com","jibecdn.com")
+TITLE_HINT = re.compile(
+    r"bioinform|computational|scientist|data science|data scientist|genomic|microbiom|"
+    r"metagenom|informatics|algorithm|research|director|manager|engineer|developer|"
+    r"software|application|analyst|microbiolog|ferment|bioprocess|food techn|food sci|"
+    r"probiotic|protein|laboratory|lab technician|strain|cultivation|brew",
+    re.I,
+)
+EXTERNAL_JOB_HOST_HINTS = (
+    "greenhouse.io", "lever.co", "ashbyhq.com", "recruitee.com", "gem.com",
+    "oraclecloud.com", "smartrecruiters.com", "myworkdayjobs.com", "jobvite.com",
+    "icims.com", "workable.com", "isolvedhire.com", "jibecdn.com", "recright.com",
+    "personio.de", "teamtailor.com", "bamboohr.com",
+)
 
 
 def _jsonld_job(soup):
@@ -80,12 +91,16 @@ class CareerPageAdapter(BaseAdapter):
         # without individual job-detail links (e.g. server-rendered filtered lists).
         if company.get("heading_jobs"):
             marker=None
-            marker_re=re.compile(r"open positions?|current openings?|career opportunities|job opportunities|openings",re.I)
+            marker_re=re.compile(
+                r"open positions?|current openings?|career opportunities|job opportunities|"
+                r"openings|vacancies|join us|we seek",
+                re.I,
+            )
             for h in soup.find_all(["h1","h2","h3","h4","h5"]):
                 if marker_re.search(h.get_text(" ",strip=True)):
                     marker=h; break
             if marker:
-                for h in marker.find_all_next(["h3","h4","h5","h6"]):
+                for h in marker.find_all_next(["h2","h3","h4","h5","h6"]):
                     title=h.get_text(" ",strip=True)
                     if not title or len(title)>180 or title.lower() in {"open positions","view more","nothing found"}:
                         continue

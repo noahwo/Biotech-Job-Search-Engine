@@ -1,3 +1,5 @@
+active_target_profile: user1
+
 companies:
 - name: Element Biosciences
   priority: Tier 1
@@ -1858,108 +1860,126 @@ companies:
   enabled: true
   diagnostic: false
 - name: Natural Resources Institute Finland (Luke)
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.luke.fi/en/about-luke/career-in-luke
   enabled: true
   focus: food microbiology, natural resources, bio-based business, fermentation, dairy technology
 - name: VTT Technical Research Centre of Finland
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.vttresearch.com/en/about-us/careers
   enabled: true
   focus: industrial biotechnology, synthetic biology, fermentation, food science
 - name: University of Helsinki
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.helsinki.fi/en/about-us/careers
   enabled: true
   focus: food science, comparative genomics, microbiology, faculty of agriculture and forestry
 - name: TFTAK (Center of Food and Fermentation Technologies)
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.tftak.eu/careers
   enabled: true
   focus: food technology, fermentation, bio-engineering, applied microbiology
 - name: BioGaia
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.biogaiagroup.com/about-biogaia/career
   enabled: true
   focus: probiotics, L. reuteri, clinical microbiology, gut health, EMEA research
 - name: Tiny Health
+  target_profile: user1
   priority: Tier 1
   platform: ashby
   enabled: true
   board: tiny-health
   focus: microbiome/metagenomics
 - name: Seed Health
+  target_profile: user1
   priority: Tier 1
   platform: greenhouse
   enabled: true
   board: seed
   focus: microbiome, probiotics formulation
 - name: Pendulum Therapeutics
+  target_profile: user1
   priority: Tier 1
   platform: lever
   enabled: true
   board: pendulum
   focus: microbiome/metagenomics, next-gen probiotics
 - name: Vedanta Biosciences
+  target_profile: user1
   priority: Tier 1
   platform: greenhouse
   enabled: true
   board: vedantabiosciences
   focus: microbiome therapeutics, bacterial consortia
 - name: Microba Life Sciences
+  target_profile: user1
   priority: Tier 1
   platform: browser_career
   url: https://microba.com/careers/
   enabled: true
   focus: metagenomics, microbiome diagnostics
 - name: Locus Biosciences
+  target_profile: user1
   priority: Tier 1
   platform: recruitee
   enabled: true
   board: locusbiosciences
   focus: microbiome, precision antibacterial, phage
 - name: SNIPR Biome
+  target_profile: user1
   priority: Tier 1
   platform: browser_career
   url: https://www.sniprbiome.com/careers-overview
   enabled: true
   focus: CRISPR antimicrobials, microbiome engineering
 - name: Microbiotica
+  target_profile: user1
   priority: Tier 1
   platform: browser_career
   url: https://microbiotica.com/
   enabled: true
   focus: microbiome therapeutics, metagenomics
 - name: FitBiomics
+  target_profile: user1
   priority: Tier 1
   platform: browser_career
   url: https://fitbiomics.com/
   enabled: true
   focus: microbiome, probiotics, sports translation
 - name: Concerto Biosciences
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.concertobio.com/careers
   enabled: true
   focus: microbial communities, synthetic ecology
 - name: Valio
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://www.valio.com/careers/
   enabled: true
   focus: dairy, probiotics, lactic acid bacteria, fermentation R&D
 - name: Arla Foods
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://jobs.arla.com/gb/en/search-results
   enabled: true
   focus: dairy products, milk processing, food fermentation, microbiology
 - name: Novonesis (Novozymes)
+  target_profile: user1
   priority: Tier 1
   platform: workday
   host: novonesis.wd103.myworkdayjobs.com
@@ -1968,6 +1988,7 @@ companies:
   enabled: true
   focus: industrial enzymes, microorganisms, fermentation, food biotech
 - name: Nestlé
+  target_profile: user1
   priority: Tier 1
   platform: successfactors
   enabled: true
@@ -1983,12 +2004,14 @@ companies:
   zero_result_verified: false
   diagnostic: false
 - name: Danone
+  target_profile: user1
   priority: Tier 1
   platform: career_page
   url: https://careers.danone.com/en-global/home.html
   enabled: true
   focus: dairy, fermented beverages, yogurt, probiotics, microbiome science
 - name: Kerry Group
+  target_profile: user1
   priority: Tier 1
   platform: workday
   host: kerry.wd3.myworkdayjobs.com
@@ -1997,6 +2020,7 @@ companies:
   enabled: true
   focus: taste and nutrition, food enzymes, probiotics, fermentation technology
 - name: Heineken
+  target_profile: user1
   priority: Tier 1
   platform: workday
   host: heineken.wd3.myworkdayjobs.com
@@ -2005,6 +2029,7 @@ companies:
   enabled: true
   focus: brewing, yeast fermentation, bioprocess, beverage science
 - name: Carlsberg Group
+  target_profile: user1
   priority: Tier 1
   platform: workday
   host: carlsberg.wd3.myworkdayjobs.com
@@ -2012,3 +2037,192 @@ companies:
   board: Carlsberg_Careers
   enabled: true
   focus: brewing science, yeast technology, fermentation, beverage
+
+# user1-specific expansion (2026-09): Finland-first food biotechnology plus
+# European probiotics, food microbiology, precision fermentation, and vegan protein.
+# target_profile is descriptive metadata; the current engine safely ignores it.
+- name: Solar Foods
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://solarfoods.com/careers/
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  enrich_all: true
+  max_detail_requests: 20
+  focus: Finland; microbial protein; gas fermentation; food biotechnology; bioprocess scale-up
+  note: Official careers page links to Recright applications and also publishes openings on-page.
+- name: Onego Bio
+  target_profile: user1
+  priority: Tier 1
+  platform: career_page
+  url: https://www.onego.bio/careers
+  enabled: true
+  diagnostic: false
+  heading_jobs: false
+  zero_result_verified: true
+  focus: Finland; precision fermentation; fungal biotechnology; animal-free egg protein; food science
+  note: Official careers page covers Helsinki and US roles; it currently also accepts expressions of interest.
+- name: Enifer
+  target_profile: user1
+  priority: Tier 1
+  platform: career_page
+  url: https://enifer.com/contact
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  zero_result_verified: true
+  focus: Finland; fungal fermentation; mycoprotein; circular food ingredients; industrial biotechnology
+  note: Official site currently invites future colleagues but does not expose a dedicated vacancy board.
+- name: Fazer Group
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://www.fazergroup.com/careers/open-positions/
+  enabled: true
+  diagnostic: false
+  follow_entry_links: true
+  render_wait_ms: 4000
+  max_detail_requests: 30
+  focus: Finland; food and beverage; food science; product development; plant-based foods; microbiology
+- name: Paulig Group
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://www.pauliggroup.com/careers/open-positions
+  enabled: true
+  diagnostic: false
+  follow_entry_links: true
+  render_wait_ms: 4000
+  max_detail_requests: 30
+  focus: Finland; food and beverage; plant-based foods; product development; quality; food microbiology
+- name: Oddlygood
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://careers.oddlygood.com/jobs
+  enabled: true
+  diagnostic: false
+  render_wait_ms: 3000
+  max_detail_requests: 20
+  zero_result_verified: true
+  focus: Finland; vegan food; plant-based dairy alternatives; product development; food science
+- name: IFF
+  target_profile: user1
+  priority: Tier 1
+  platform: workday
+  host: iff.wd5.myworkdayjobs.com
+  tenant: iff
+  board: IFF_Careers
+  enabled: true
+  diagnostic: false
+  page_size: 20
+  max_pages: 100
+  max_detail_requests: 35
+  focus: Finland and Europe; probiotics; food enzymes; cultures; biotechnology; microbiology; food science
+- name: dsm-firmenich
+  target_profile: user1
+  priority: Tier 2
+  platform: browser_career
+  url: https://jobs.dsm-firmenich.com/careers?domain=dsm.com&hl=en_US
+  enabled: true
+  diagnostic: false
+  follow_entry_links: true
+  render_wait_ms: 4500
+  max_detail_requests: 35
+  focus: Europe; nutrition; food and beverage; cultures; probiotics; fermentation; biotechnology
+- name: Formo
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://formo.bio/work/
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  max_detail_requests: 25
+  focus: Germany; precision fermentation; microbial engineering; animal-free dairy protein; food science
+- name: The Protein Brewery
+  target_profile: user1
+  priority: Tier 1
+  platform: career_page
+  url: https://www.theproteinbrewery.com/vacancies
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  max_detail_requests: 20
+  focus: Netherlands; biomass fermentation; fungal protein; vegan protein; food biotechnology
+- name: MicroHarvest
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://microharvest.com/careers/
+  enabled: true
+  diagnostic: false
+  follow_entry_links: true
+  entry_text_terms:
+  - careers
+  - join us
+  - we are hiring
+  render_wait_ms: 3500
+  enrich_all: true
+  heading_jobs: true
+  rendered_job_selector: .row
+  rendered_job_title_selector: .q
+  rendered_job_link_selector: a[href]
+  rendered_job_description_selector: .text
+  rendered_job_location_attribute: data-location
+  max_detail_requests: 20
+  focus: Germany and Portugal; microbial protein; biomass fermentation; food biotechnology; bioprocessing
+- name: Nosh.bio
+  target_profile: user1
+  priority: Tier 1
+  platform: browser_career
+  url: https://www.nosh.food/careers
+  enabled: true
+  diagnostic: false
+  render_wait_ms: 3500
+  max_detail_requests: 20
+  zero_result_verified: true
+  focus: Germany; fungal fermentation; mycoprotein; vegan protein; food product development
+- name: Vivici
+  target_profile: user1
+  priority: Tier 1
+  platform: career_page
+  url: https://www.vivici.com/working-with-us
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  zero_result_verified: true
+  focus: Netherlands; precision fermentation; animal-free dairy proteins; strain engineering; food science
+  note: Official working-with-us page currently has no structured vacancy list.
+- name: Melt&Marble
+  target_profile: user1
+  priority: Tier 1
+  platform: career_page
+  url: https://www.meltandmarble.com/jobs
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  max_detail_requests: 20
+  focus: Sweden; precision fermentation; metabolic engineering; microbial oils; sustainable food ingredients
+- name: Lallemand
+  target_profile: user1
+  priority: Tier 1
+  platform: empty
+  url: https://careers.lallemand.com/job-postings
+  enabled: true
+  diagnostic: false
+  zero_result_verified: true
+  focus: Europe and global; probiotics; yeast; bacteria; food microbiology; fermentation; beverages
+  note: Official careers board is protected by a bot-verification challenge and is not safely collectable.
+- name: Lesaffre
+  target_profile: user1
+  priority: Tier 1
+  platform: career_page
+  url: https://www.lesaffre.com/careers/jobs/
+  enabled: true
+  diagnostic: false
+  heading_jobs: true
+  max_detail_requests: 40
+  focus: Europe and global; yeast; probiotics; food fermentation; baking; beverages; industrial microbiology
